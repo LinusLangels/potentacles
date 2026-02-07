@@ -66,8 +66,6 @@ public class MapGenerator : MonoBehaviour
         // Instantiate the wall
         GameObject road = Instantiate(roadprefab, new Vector3(0, 0, nextSpawnZ), Quaternion.identity);
         activeRoads.Enqueue(road);
-
-
     }
 
     void SpawnWall()
@@ -87,6 +85,4 @@ public class MapGenerator : MonoBehaviour
         activeWalls.Enqueue(wallLeft);
         activeWalls.Enqueue(wallRight);
     }
-
-
 }
