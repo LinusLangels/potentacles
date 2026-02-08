@@ -293,6 +293,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   CurrentState: 0
   MapGenerator: {fileID: 1171410215}
+  Player: {fileID: 23489263}
+  StartingLevelLength: 100
+  LevelLengthIncrease: 20
+  InitialFunds: 100
 --- !u!4 &619058159
 Transform:
   m_ObjectHideFlags: 0
@@ -319,6 +323,34 @@ PrefabInstance:
     - target: {fileID: 1764246729506567646, guid: c85abcaae22197349b1c483b51c19c89, type: 3}
       propertyPath: m_Name
       value: UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103535096020266971, guid: c85abcaae22197349b1c483b51c19c89, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103535096020266971, guid: c85abcaae22197349b1c483b51c19c89, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103535096020266971, guid: c85abcaae22197349b1c483b51c19c89, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4195376440441693888, guid: c85abcaae22197349b1c483b51c19c89, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 23489263}
+    - target: {fileID: 4626873369394483131, guid: c85abcaae22197349b1c483b51c19c89, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4626873369394483131, guid: c85abcaae22197349b1c483b51c19c89, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4626873369394483131, guid: c85abcaae22197349b1c483b51c19c89, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7567510663013109511, guid: c85abcaae22197349b1c483b51c19c89, type: 3}
       propertyPath: DrunkUI
@@ -429,6 +461,55 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c85abcaae22197349b1c483b51c19c89, type: 3}
+--- !u!1 &874063452
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 874063454}
+  - component: {fileID: 874063453}
+  m_Layer: 0
+  m_Name: FundsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &874063453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 874063452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d29770906007d4c4a90b9a1edba4351b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FundsManager
+  BouncerPushForce: 5
+  Data:
+  - Funds: 50
+  - Funds: 70
+  - Funds: 100
+--- !u!4 &874063454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 874063452}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 213.72017, y: 0, z: 6147.4453}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &961739749
 GameObject:
   m_ObjectHideFlags: 0
@@ -878,3 +959,4 @@ SceneRoots:
   - {fileID: 680375510}
   - {fileID: 619058159}
   - {fileID: 2114374337}
+  - {fileID: 874063454}

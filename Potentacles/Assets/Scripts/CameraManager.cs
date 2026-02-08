@@ -19,7 +19,8 @@ public class CameraManager : MonoBehaviour
     {
         if (player == null) return;
 
-        if (GameStateManager.Instance.CurrentState == GameState.Walking)
+        if (GameStateManager.Instance.CurrentState == GameState.Walking ||
+            GameStateManager.Instance.CurrentState == GameState.Startup)
         {
 
             // Calculate target position with offset, but lock to world Z-forward

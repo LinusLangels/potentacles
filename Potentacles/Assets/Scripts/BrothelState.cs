@@ -100,8 +100,9 @@ public class BrothelState : MonoBehaviour
         var data = BrothelManager.Instance.GetBrothelData(this);
 
         ReferencedPlayer.balanceState.ReduceImbalance(data.BalanceImprovement);
-
         ReferencedPlayer.walletState.ApplyCost(data.Cost);
+
+        ReferencedPlayer.Visit();
     }
 
     void OnTriggerExit(Collider other)

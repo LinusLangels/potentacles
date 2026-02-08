@@ -5,8 +5,8 @@ public class ATM : MonoBehaviour
 {
     private float TimeEntered;
 
-    public float TimeInBrothel = 2f;
-    public int BrothelLevel = 1;
+    public float TimeInATM = 2f;
+    public int ATMLevel = 1;
 
     private BoxCollider Collider;
 
@@ -38,7 +38,7 @@ public class ATM : MonoBehaviour
         if (player != null)
         {
             ReferencedPlayer = player;
-            GameStateManager.Instance.SetGameState(GameState.InBrothel);
+            GameStateManager.Instance.SetGameState(GameState.ATM);
             TimeEntered = Time.time;
 
             StartCoroutine(LerpPlayer());
@@ -49,7 +49,7 @@ public class ATM : MonoBehaviour
 
     IEnumerator LerpPlayer()
     {
-        float targetTime = TimeInBrothel / 2f;
+        float targetTime = TimeInATM / 2f;
         float currentTime = 0;
 
         Vector3 playerStart = ReferencedPlayer.transform.position;
@@ -87,7 +87,7 @@ public class ATM : MonoBehaviour
         bouncer.y = 0f;
         bouncer.z = 0f;
 
-        var Force = BrothelManager.Instance.BouncerPushForce;
+        var Force = FundsManager.Instance.BouncerPushForce;
         if (targetPosition.x > 0f)
         {
             ReferencedPlayer.AddForce(-Force);
@@ -97,7 +97,11 @@ public class ATM : MonoBehaviour
             ReferencedPlayer.AddForce(Force);
         }
 
-       // ReferencedPlayer.balanceState.ReduceImbalance(improvement);
+        var data = FundsManager.Instance.GetFundsData(this);
+
+        ReferencedPlayer.walletState.GiveFunds(data.Funds);
+
+        ReferencedPlayer.Visit();
     }
 
     void OnTriggerExit(Collider other)

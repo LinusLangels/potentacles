@@ -10,6 +10,16 @@ public class WalletState : MonoBehaviour
         CurrentFunds = Mathf.Max(0, CurrentFunds - cost);
     }
 
+    internal void GiveFunds(int funds)
+    {
+        CurrentFunds += funds;
+    }
+
+    public void ResetWallet(int initialFunds)
+    {
+        CurrentFunds = initialFunds;
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

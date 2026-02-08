@@ -6,6 +6,9 @@ public class DrunkState : MonoBehaviour
     [SerializeField] private float currentImbalance = 0f;
     [SerializeField] private float maxImbalance = 100f;
 
+    [Header("Game Over Settings")]
+    [SerializeField] private float GameOverTimer = 2f;
+
     [Header("Time Settings")]
     [SerializeField] private float minTimeBetweenAdds = 2f;
     [SerializeField] private float maxTimeBetweenAdds = 5f;
@@ -22,6 +25,7 @@ public class DrunkState : MonoBehaviour
 
     private float nextAddTime;
     private Player player;
+    private float gameOverTimer;
 
     void Start()
     {
@@ -31,18 +35,38 @@ public class DrunkState : MonoBehaviour
 
     void Update()
     {
+        if (GameStateManager.Instance.CurrentState == GameState.Down)
+            return;
+
         if (Time.time >= nextAddTime && currentImbalance < maxImbalance)
         {
             AddImbalance();
             ScheduleNextAdd();
         }
 
-        CheckGameOver();
+        if (CheckGameOver())
+        {
+            GameStateManager.Instance.SetGameState(GameState.Down);
+        }
     }
 
-    void CheckGameOver()
+    bool CheckGameOver()
     {
+        if (currentImbalance >= maxImbalance)
+        {
+            gameOverTimer += Time.deltaTime;
 
+            if (gameOverTimer > GameOverTimer)
+            {
+                return true;
+            }
+        }
+        else
+        {
+            gameOverTimer = 0f;
+        }
+
+        return false;
     }
 
     private void AddImbalance()
@@ -99,5 +123,10 @@ public class DrunkState : MonoBehaviour
     public float GetCurrentImbalance()
     {
         return currentImbalance;
+    }
+
+    internal void ResetBalance()
+    {
+        currentImbalance = 0f;
     }
 }

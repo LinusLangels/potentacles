@@ -30,6 +30,8 @@ public class Player : MonoBehaviour
     public DrunkState balanceState;
     public WalletState walletState;
 
+    public float VisitCooldown = 0f;
+
     void Start()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -77,6 +79,9 @@ public class Player : MonoBehaviour
             // Apply movement
             transform.position += totalMovement * Time.deltaTime;
         }
+
+
+        VisitCooldown = Mathf.Max(0f, VisitCooldown - Time.deltaTime);
     }
 
 
@@ -181,5 +186,24 @@ public class Player : MonoBehaviour
     internal void AddForce(float force)
     {
         balanceVelocity = force;
+    }
+
+    public float GetBalanceAngle()
+    {
+        return balanceAngle;
+    }
+
+    internal void OnATMPassed()
+    {
+    }
+
+    public bool IsVisitCooldown()
+    {
+        return VisitCooldown > 0f;
+    }
+
+    internal void Visit()
+    {
+        VisitCooldown = 2f;
     }
 }
