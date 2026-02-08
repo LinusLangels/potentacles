@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NUnit.Framework.Interfaces;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
@@ -25,9 +26,14 @@ public class Player : MonoBehaviour
 
     private const float MAX_ANGLE = Mathf.PI / 2f; // 90 degrees in radians
 
+    DrunkState drunkState;
+
     void Start()
     {
         playerInput = GetComponent<PlayerInput>();
+
+        drunkState = GetComponent<DrunkState>();
+
         rb = GetComponent<Rigidbody>();
 
         if (rb == null)
