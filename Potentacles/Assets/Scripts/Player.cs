@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using NUnit.Framework.Interfaces;
+using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
@@ -25,9 +27,14 @@ public class Player : MonoBehaviour
 
     private const float MAX_ANGLE = Mathf.PI / 2f; // 90 degrees in radians
 
+    public DrunkState balanceState;
+    public WalletState walletState;
+
     void Start()
     {
         playerInput = GetComponent<PlayerInput>();
+        balanceState = GetComponent<DrunkState>();
+        walletState = GetComponent<WalletState>();
         rb = GetComponent<Rigidbody>();
 
         if (rb == null)
@@ -46,36 +53,50 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        // Automatically accelerate forward
-        currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * Time.deltaTime);
 
-        // Simulate pendulum balance physics
-        SimulateBalance();
+        if (GameStateManager.Instance.CurrentState == GameState.Walking)
+        {
 
-        // Calculate sideways acceleration from tilt
-        float sidewaysAcceleration = CalculateTiltForce();
+            // Automatically accelerate forward
+            currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * Time.deltaTime);
 
-        // Forward movement (automatic)
-        Vector3 forwardMovement = Vector3.forward * currentSpeed;
+            // Simulate pendulum balance physics
+            SimulateBalance();
 
-        // Side movement (entirely driven by balance tilt)
-        Vector3 sideMovement = Vector3.right * sidewaysAcceleration;
+            // Calculate sideways acceleration from tilt
+            float sidewaysAcceleration = CalculateTiltForce();
 
-        Vector3 totalMovement = forwardMovement + sideMovement;
+            // Forward movement (automatic)
+            Vector3 forwardMovement = Vector3.forward * currentSpeed;
 
-        // Apply movement
-        transform.position += totalMovement * Time.deltaTime;
+            // Side movement (entirely driven by balance tilt)
+            Vector3 sideMovement = Vector3.right * sidewaysAcceleration;
+
+            Vector3 totalMovement = forwardMovement + sideMovement;
+
+            // Apply movement
+            transform.position += totalMovement * Time.deltaTime;
+        }
     }
+
+
 
     void SimulateBalance()
     {
-        // Player input disturbs the pendulum
-        // When you press left/right, you push the pendulum that direction
-        float playerForce = moveInput.x * playerCorrectionStrength;
+        // Get modifiers from BalanceState
+        float playerControlMultiplier = balanceState != null ? balanceState.GetPlayerControlMultiplier() : 1f;
+        float pendulumForceMultiplier = balanceState != null ? balanceState.GetPendulumForceMultiplier() : 1f;
+
+        // Player input disturbs the pendulum (reduced by imbalance)
+        float playerForce = moveInput.x * playerCorrectionStrength * playerControlMultiplier;
 
         // Normal pendulum physics: gravity pulls it back to center (hanging down)
         // This creates a RESTORING force (stable equilibrium)
         float restoringTorque = -(gravity / pendulumLength) * Mathf.Sin(balanceAngle);
+
+        // Apply extra force when pendulum is in motion (increased by imbalance)
+        float velocityBoost = Mathf.Abs(balanceVelocity) * (pendulumForceMultiplier - 1f);
+        restoringTorque *= (1f + velocityBoost);
 
         // Player input adds force to swing it
         float angularAcceleration = restoringTorque + playerForce;
@@ -155,5 +176,10 @@ public class Player : MonoBehaviour
             Gizmos.DrawLine(prevPoint, point);
             prevPoint = point;
         }
+    }
+
+    internal void AddForce(float force)
+    {
+        balanceVelocity = force;
     }
 }
