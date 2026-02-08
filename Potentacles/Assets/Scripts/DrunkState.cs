@@ -36,6 +36,13 @@ public class DrunkState : MonoBehaviour
             AddImbalance();
             ScheduleNextAdd();
         }
+
+        CheckGameOver();
+    }
+
+    void CheckGameOver()
+    {
+
     }
 
     private void AddImbalance()

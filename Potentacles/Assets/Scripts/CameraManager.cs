@@ -19,14 +19,19 @@ public class CameraManager : MonoBehaviour
     {
         if (player == null) return;
 
-        // Calculate target position with offset, but lock to world Z-forward
-        Vector3 targetPosition = player.transform.position + offset;
+        if (GameStateManager.Instance.CurrentState == GameState.Walking)
+        {
 
-        // Smoothly move camera to target position
-        transform.position = Vector3.SmoothDamp(transform.position, targetPosition,
-                                                ref currentVelocity, 1f / followSpeed);
+            // Calculate target position with offset, but lock to world Z-forward
+            Vector3 targetPosition = player.transform.position + offset;
 
-        // Lock camera rotation to look forward along world Z-axis
-        transform.rotation = Quaternion.identity; // Or Quaternion.Euler(0, 0, 0)
+            // Smoothly move camera to target position
+            transform.position = Vector3.SmoothDamp(transform.position, targetPosition,
+                                                    ref currentVelocity, 1f / followSpeed);
+
+            // Lock camera rotation to look forward along world Z-axis
+            transform.rotation = Quaternion.identity; // Or Quaternion.Euler(0, 0, 0)
+        }
+
     }
 }
