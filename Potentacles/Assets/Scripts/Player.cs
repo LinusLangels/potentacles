@@ -15,17 +15,25 @@ public class Player : MonoBehaviour
     [SerializeField] private float damping = 0.1f;
     [SerializeField] private float playerCorrectionStrength = 5f;
     [SerializeField] private float bounceAbsorption = 0.7f; // How much velocity is lost at bounds (0-1)
+    [SerializeField] private float tiltInfluence = 1f; // How much the tilt affects sideways movement
+
+    [Header("Gravity Settings")]
+    [SerializeField] private float gravityValue = -9.81f;
 
     private float currentSpeed;
     private Vector2 moveInput;
     private PlayerInput playerInput;
-    private Rigidbody rb;
+    private CharacterController characterController;
 
     // Balance simulation variables
     private float balanceAngle = 0f; // Current tilt angle (radians) - 0 = hanging straight down
     private float balanceVelocity = 0f; // Angular velocity
 
     private const float MAX_ANGLE = Mathf.PI / 2f; // 90 degrees in radians
+
+    // Velocity tracking for smooth movement
+    private Vector3 velocity;
+    private float sidewaysVelocity = 0f;
 
     public DrunkState balanceState;
     public WalletState walletState;
@@ -37,16 +45,16 @@ public class Player : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         balanceState = GetComponent<DrunkState>();
         walletState = GetComponent<WalletState>();
-        rb = GetComponent<Rigidbody>();
+        characterController = GetComponent<CharacterController>();
 
-        if (rb == null)
+        if (characterController == null)
         {
-            rb = gameObject.AddComponent<Rigidbody>();
+            characterController = gameObject.AddComponent<CharacterController>();
         }
-        rb.freezeRotation = true;
-        rb.useGravity = true;
 
         currentSpeed = 0f;
+        velocity = Vector3.zero;
+        sidewaysVelocity = 0f;
 
         // Start at rest (hanging straight down)
         balanceAngle = 0f;
@@ -55,10 +63,8 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-
         if (GameStateManager.Instance.CurrentState == GameState.Walking)
         {
-
             // Automatically accelerate forward
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * Time.deltaTime);
 
@@ -68,23 +74,40 @@ public class Player : MonoBehaviour
             // Calculate sideways acceleration from tilt
             float sidewaysAcceleration = CalculateTiltForce();
 
+            //// Update sideways velocity based on tilt
+            //sidewaysVelocity += sidewaysAcceleration;
+
+            //// Apply some damping to sideways movement for smoothness
+            //sidewaysVelocity *= 0.95f;
+
             // Forward movement (automatic)
             Vector3 forwardMovement = Vector3.forward * currentSpeed;
 
             // Side movement (entirely driven by balance tilt)
             Vector3 sideMovement = Vector3.right * sidewaysAcceleration;
 
-            Vector3 totalMovement = forwardMovement + sideMovement;
+            // Combine movements
+            Vector3 horizontalMovement = forwardMovement + sideMovement;
 
-            // Apply movement
-            transform.position += totalMovement * Time.deltaTime;
+            // Apply gravity
+            if (characterController.isGrounded)
+            {
+                velocity.y = -2f; // Small downward force to keep grounded
+            }
+            else
+            {
+                velocity.y += gravityValue * Time.deltaTime;
+            }
+
+            // Combine horizontal and vertical movement
+            Vector3 totalMovement = horizontalMovement + Vector3.up * velocity.y;
+
+            // Move the character controller
+            characterController.Move(totalMovement * Time.deltaTime);
         }
-
 
         VisitCooldown = Mathf.Max(0f, VisitCooldown - Time.deltaTime);
     }
-
-
 
     void SimulateBalance()
     {

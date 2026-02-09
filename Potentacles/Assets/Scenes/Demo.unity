@@ -124,7 +124,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 557522211841104509, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
   m_PrefabInstance: {fileID: 4903400630131103365}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1006809512}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b30fa25c7de3c047ba9af0686ca850c, type: 3}
@@ -665,12 +665,17 @@ MonoBehaviour:
   followSpeed: 10
   lookAheadDistance: 2
   rotationSpeed: 5
+--- !u!1 &1006809512 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2649357900162359882, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
+  m_PrefabInstance: {fileID: 4903400630131103365}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1103323260 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 463536721207669783, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
   m_PrefabInstance: {fileID: 4903400630131103365}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1006809512}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f609d06750d60f6459e9d6cb7baabe5d, type: 3}
@@ -692,12 +697,37 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7991568952917324592, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
   m_PrefabInstance: {fileID: 4903400630131103365}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1006809512}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cda8010f4ecdad3488e3e009f59743c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WalletState
+--- !u!143 &1553710059
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006809512}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &2114374335
 GameObject:
   m_ObjectHideFlags: 0
@@ -861,7 +891,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 557522211841104509, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
       propertyPath: targetSpeed
-      value: 7
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 557522211841104509, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
+      propertyPath: VisitCooldown
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 557522211841104509, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
+      propertyPath: tiltInfluence
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 982115325545796512, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -903,6 +941,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1662618015515599358, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
+      propertyPath: m_Name
+      value: Capsule
+      objectReference: {fileID: 0}
     - target: {fileID: 2649357900162359882, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
       propertyPath: m_Name
       value: Player
@@ -939,6 +981,10 @@ PrefabInstance:
       propertyPath: m_ControlsChangedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 5765501343948312653, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7991568952917324592, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
       propertyPath: CurrentFunds
       value: 100
@@ -946,7 +992,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2649357900162359882, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1553710059}
   m_SourcePrefab: {fileID: 100100000, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
