@@ -42,7 +42,6 @@ public class GameStateManager : MonoBehaviour
     {
         MapGenerator.ResetMapGenerator(StartingLevelLength);
 
-
         SetGameState(GameState.Startup);
 
         StartCoroutine(StartWalking());

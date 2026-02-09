@@ -1,16 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class WallRarity
+{
+    public string name;
+    public GameObject[] wallPrefabs;
+    [Range(0f, 100f)]
+    public float weight = 1f;
+}
 
 public class MapGenerator : MonoBehaviour
 {
     public Player Player;
     [Header("Wall Prefabs")]
     [SerializeField] private GameObject[] roadPrefabs;
-    [Header("Wall Prefabs")]
-    [SerializeField] private GameObject[] wallPrefabs;
+
+    [Header("Level Data")]
+    [SerializeField] private List<MapSpawnTable> LevelSpawnTable;
+
     [Header("ATM Prefabs")]
     [SerializeField] private GameObject ATM;
+
     [Header("Generation Settings")]
     [SerializeField] private float wallWidth = 10f; // Width/length of each wall segment
     [SerializeField] private int visibleWallCount = 10; // How many walls ahead to keep active
@@ -25,14 +36,72 @@ public class MapGenerator : MonoBehaviour
 
     private int currentLevel = 0;
 
+    private MapSpawnTable CurrentTable;
+
     // Track ATM sections
     private List<float> atmSectionPositions = new List<float>();
     private HashSet<float> passedATMSections = new HashSet<float>(); // Track which ATMs we've passed
     public float ClosestATMZ { get; private set; }
 
+    // Weighted random cache
+    private float totalWeight;
+
     void Start()
     {
         LevelLength = initialLevelLength;
+    }
+
+    void SetTable()
+    {
+        int clampedLevel = Mathf.Clamp(currentLevel, 0, LevelSpawnTable.Count - 1);
+        CurrentTable = LevelSpawnTable[clampedLevel];
+    }
+
+    void CalculateTotalWeight()
+    {
+        totalWeight = 0f;
+        foreach (var rarity in CurrentTable.wallRarities)
+        {
+            totalWeight += rarity.weight;
+        }
+    }
+
+    GameObject GetRandomWallByRarity()
+    {
+        // Generate random value between 0 and total weight
+        float randomValue = Random.Range(0f, totalWeight);
+        float cumulativeWeight = 0f;
+
+        // Find which rarity tier we hit
+        foreach (var rarity in CurrentTable.wallRarities)
+        {
+            cumulativeWeight += rarity.weight;
+
+            if (randomValue <= cumulativeWeight)
+            {
+                // Check if this rarity has any prefabs
+                if (rarity.wallPrefabs == null || rarity.wallPrefabs.Length == 0)
+                {
+                    Debug.LogWarning($"Rarity tier '{rarity.name}' has no prefabs assigned!");
+                    continue;
+                }
+
+                // Pick a random prefab from this rarity tier
+                return rarity.wallPrefabs[Random.Range(0, rarity.wallPrefabs.Length)];
+            }
+        }
+
+        // Fallback: if something went wrong, use the first available prefab
+        foreach (var rarity in CurrentTable.wallRarities)
+        {
+            if (rarity.wallPrefabs != null && rarity.wallPrefabs.Length > 0)
+            {
+                return rarity.wallPrefabs[0];
+            }
+        }
+
+        Debug.LogError("No wall prefabs available in any rarity tier!");
+        return null;
     }
 
     void Generate()
@@ -81,6 +150,9 @@ public class MapGenerator : MonoBehaviour
 
                 currentLevel++;
 
+                SetTable();
+                CalculateTotalWeight();
+
                 // Continue to spawn more if needed
                 continue;
             }
@@ -101,14 +173,13 @@ public class MapGenerator : MonoBehaviour
             currentLevelProgress += wallWidth;
         }
     }
+
     void Update()
     {
         if (GameStateManager.Instance.CurrentState == GameState.Walking)
         {
             Generate();
         }
-
-      
     }
 
     void CheckATMPassed(float playerZ)
@@ -179,9 +250,16 @@ public class MapGenerator : MonoBehaviour
 
     void SpawnWall()
     {
-        // Pick a random wall from the pool
-        GameObject wallPrefabLeft = wallPrefabs[Random.Range(0, wallPrefabs.Length)];
-        GameObject wallPrefabRight = wallPrefabs[Random.Range(0, wallPrefabs.Length)];
+        // Pick random walls based on rarity weights
+        GameObject wallPrefabLeft = GetRandomWallByRarity();
+        GameObject wallPrefabRight = GetRandomWallByRarity();
+
+        if (wallPrefabLeft == null || wallPrefabRight == null)
+        {
+            Debug.LogError("Failed to get wall prefabs!");
+            return;
+        }
+
         Vector3 spawnPosLeft = new Vector3(-6f, 0, nextSpawnZ);
         Vector3 spawnPosRight = new Vector3(6f, 0, nextSpawnZ);
 
@@ -205,12 +283,28 @@ public class MapGenerator : MonoBehaviour
         Vector3 spawnPosLeft = new Vector3(-6f, 0, nextSpawnZ);
         Vector3 spawnPosRight = new Vector3(6f, 0, nextSpawnZ);
 
-        GameObject atmLeft = Instantiate(ATM, spawnPosLeft, Quaternion.identity);
-        GameObject atmRight = Instantiate(ATM, spawnPosRight, Quaternion.identity);
-        atmRight.transform.localScale = new Vector3(-1, 1, 1);
+        var spawnLeft = Random.Range(0, 2) == 1;
 
-        activeWalls.Enqueue(atmLeft);
-        activeWalls.Enqueue(atmRight);
+        GameObject randomWall = GetRandomWallByRarity();
+
+        GameObject wallLeft = null;
+        GameObject wallRight = null;
+
+        if (spawnLeft)
+        {
+            wallLeft = Instantiate(ATM, spawnPosLeft, Quaternion.identity);
+            wallRight = Instantiate(randomWall, spawnPosRight, Quaternion.identity);
+        }
+        else
+        {
+            wallLeft = Instantiate(randomWall, spawnPosLeft, Quaternion.identity);
+            wallRight = Instantiate(ATM, spawnPosRight, Quaternion.identity);
+        }
+
+        wallRight.transform.localScale = new Vector3(-1, 1, 1);
+
+        activeWalls.Enqueue(wallLeft);
+        activeWalls.Enqueue(wallRight);
 
         // Track this ATM section's position
         atmSectionPositions.Add(nextSpawnZ);
@@ -259,7 +353,15 @@ public class MapGenerator : MonoBehaviour
         LevelLength = initialLength;
         ClosestATMZ = float.MaxValue;
 
+        // Recalculate weights in case they changed
+
+
+        SetTable();
+
+        CalculateTotalWeight();
+
         Generate();
+  
 
         Debug.Log("Map Generator reset!");
     }

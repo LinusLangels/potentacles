@@ -45,7 +45,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapGenerator
   Player: {fileID: 0}
-  wallPrefabs: []
-  wallWidth: 10
+  roadPrefabs:
+  - {fileID: 3285227847029403823, guid: 7d439b645284ad548b122b01e10938f6, type: 3}
+  wallRarities:
+  - name: Normal
+    wallPrefabs:
+    - {fileID: 3303781709452905308, guid: 0585abdd206b3454e80fc5f787df47e1, type: 3}
+    - {fileID: 3303781709452905308, guid: 02012aaaa910e6b418619375b841e04d, type: 3}
+    weight: 70
+  - name: Uncommon
+    wallPrefabs:
+    - {fileID: 3303781709452905308, guid: efbe1045c0ae67b4eab9372fab552062, type: 3}
+    weight: 25
+  - name: Rare
+    wallPrefabs:
+    - {fileID: 3303781709452905308, guid: efbe1045c0ae67b4eab9372fab552062, type: 3}
+    weight: 5
+  ATM: {fileID: 3303781709452905308, guid: e73739e70da4eb940af30b0dcf7b2110, type: 3}
+  wallWidth: 20
   visibleWallCount: 10
-  player: {fileID: 3966223289682142004, guid: 7d439b645284ad548b122b01e10938f6, type: 3}
+  initialLevelLength: 50

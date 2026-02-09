@@ -789,10 +789,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2619737501326586438, guid: a145d327c94187e41ae43b2480291339, type: 3}
-      propertyPath: ATM
-      value: 
-      objectReference: {fileID: 3303781709452905308, guid: e73739e70da4eb940af30b0dcf7b2110, type: 3}
-    - target: {fileID: 2619737501326586438, guid: a145d327c94187e41ae43b2480291339, type: 3}
       propertyPath: Player
       value: 
       objectReference: {fileID: 23489263}
@@ -801,25 +797,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 23489267}
     - target: {fileID: 2619737501326586438, guid: a145d327c94187e41ae43b2480291339, type: 3}
-      propertyPath: wallWidth
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 2619737501326586438, guid: a145d327c94187e41ae43b2480291339, type: 3}
       propertyPath: StreetTile
       value: 
       objectReference: {fileID: 3285227847029403823, guid: 7d439b645284ad548b122b01e10938f6, type: 3}
     - target: {fileID: 2619737501326586438, guid: a145d327c94187e41ae43b2480291339, type: 3}
-      propertyPath: roadPrefabs.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2619737501326586438, guid: a145d327c94187e41ae43b2480291339, type: 3}
       propertyPath: wallPrefabs.Array.size
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 2619737501326586438, guid: a145d327c94187e41ae43b2480291339, type: 3}
-      propertyPath: 'roadPrefabs.Array.data[0]'
-      value: 
-      objectReference: {fileID: 3285227847029403823, guid: 7d439b645284ad548b122b01e10938f6, type: 3}
     - target: {fileID: 2619737501326586438, guid: a145d327c94187e41ae43b2480291339, type: 3}
       propertyPath: 'wallPrefabs.Array.data[0]'
       value: 
@@ -832,6 +816,30 @@ PrefabInstance:
       propertyPath: 'wallPrefabs.Array.data[2]'
       value: 
       objectReference: {fileID: 3303781709452905308, guid: efbe1045c0ae67b4eab9372fab552062, type: 3}
+    - target: {fileID: 2619737501326586438, guid: a145d327c94187e41ae43b2480291339, type: 3}
+      propertyPath: LevelSpawnTable.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2619737501326586438, guid: a145d327c94187e41ae43b2480291339, type: 3}
+      propertyPath: 'LevelSpawnTable.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 418cf584ee6bb2545a3fc272360ea40f, type: 2}
+    - target: {fileID: 2619737501326586438, guid: a145d327c94187e41ae43b2480291339, type: 3}
+      propertyPath: 'LevelSpawnTable.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 01f8ff8a3100bc346acc6fa527d0324d, type: 2}
+    - target: {fileID: 2619737501326586438, guid: a145d327c94187e41ae43b2480291339, type: 3}
+      propertyPath: wallRarities.Array.data[0].weight
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 2619737501326586438, guid: a145d327c94187e41ae43b2480291339, type: 3}
+      propertyPath: wallRarities.Array.data[1].weight
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2619737501326586438, guid: a145d327c94187e41ae43b2480291339, type: 3}
+      propertyPath: wallRarities.Array.data[2].weight
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6092967442736113837, guid: a145d327c94187e41ae43b2480291339, type: 3}
       propertyPath: m_Name
       value: MapGenerator
@@ -892,6 +900,10 @@ PrefabInstance:
     - target: {fileID: 557522211841104509, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
       propertyPath: targetSpeed
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 557522211841104509, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
+      propertyPath: acceleration
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 557522211841104509, guid: 2863b1bf165517147b8e79f7ef8a808e, type: 3}
       propertyPath: VisitCooldown
